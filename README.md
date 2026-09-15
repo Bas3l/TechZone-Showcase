@@ -255,7 +255,7 @@ No production credentials or private customer data are included.
 
 **Basel**
 
-Cybersecurity student and software/security developer.
+Cybersecurity student.
 
 `PHP` · `Oracle SQL` · `Database Design` · `OCI8` · `Web Security` · `Authentication` · `RBAC` · `Transaction Processing` · `Inventory Systems`
 
