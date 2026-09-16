@@ -142,6 +142,8 @@ Authorization is enforced on the server side rather than relying only on hidden 
 | `STAFF` | Operational create/edit and permitted management actions |
 | `VIEWER` | Read-only access |
 
+The isolated cloud demonstration environment additionally uses a restricted `DEMO` role. It allows normal read-only exploration plus controlled order creation while preventing administrative inventory, customer, and supplier modification.
+
 ---
 
 ## Database Design
@@ -198,7 +200,45 @@ The database also uses primary keys, foreign keys, sequences, CHECK constraints,
 └──────────────────────────────┘
 ```
 
-See [docs/architecture.md](docs/architecture.md) for the technical architecture overview.
+See [docs/architecture.md](docs/architecture.md) for the technical architecture overview and cloud demonstration topology.
+
+---
+
+## Cloud Demonstration Environment
+
+A separate, isolated TechZone demonstration environment has been deployed on **Oracle Cloud Infrastructure (OCI)** to validate the application outside the original Windows/XAMPP development environment.
+
+```text
+Client Browser
+      │
+      ▼
+OCI Compute — Ampere A1 / Oracle Linux 9
+Apache + PHP-FPM + OCI8
+      │
+      │ TCPS
+      ▼
+Oracle Autonomous Database 26ai
+```
+
+The cloud environment uses a dedicated demonstration database schema and restricted application role. No production credentials, private source repository, or customer data are exposed through this showcase repository.
+
+Deployment validation completed in the cloud environment includes:
+
+- Clean TechZone schema installation on Oracle Autonomous Database 26ai
+- Demo dataset installation and verification
+- PHP/OCI8 connectivity over TCPS
+- Authentication and dashboard operation
+- Inventory, customer, supplier, and order read workflows
+- Restricted demonstration-role authorization
+- Real order transaction processing
+- Automatic stock deduction
+- Transaction persistence and order-detail verification
+- Demo database reset workflow
+- Application restart/reboot survival testing
+
+The public server is hardened with an enforcing SELinux policy, firewalld, SSH key authentication, restricted database network access, Apache security controls, disabled HTTP TRACE, blocked unused CGI access, reduced PHP exposure, disabled PHP file uploads for the demo workload, external application logging, log rotation, and current security updates at the time of deployment validation.
+
+HTTPS is intentionally not claimed as part of the current demo validation; domain-based TLS deployment remains a separate deployment step.
 
 ---
 
@@ -206,14 +246,17 @@ See [docs/architecture.md](docs/architecture.md) for the technical architecture 
 
 | Layer | Technology |
 | --- | --- |
-| Backend | PHP 8.2 |
+| Backend | PHP 8.x |
 | Database | Oracle Database |
 | Database Driver | OCI8 |
-| Web Server | Apache / XAMPP |
+| Web Server | Apache / PHP-FPM or XAMPP |
 | Frontend | HTML5, CSS3, JavaScript |
-| Development Environment | Windows |
+| Local Development | Windows / XAMPP |
+| Cloud Demo | OCI / Oracle Linux 9 / Autonomous Database 26ai |
 
-TechZone v1.0 has been tested with Oracle Database 10g XE. Compatibility with newer Oracle Database releases is planned for validation in an appropriate target environment.
+The preserved TechZone v1.0 release was regression-tested in its original environment with **PHP 8.2 and Oracle Database 10g XE**. A separate cloud demonstration deployment has since validated the clean schema and core application workflows against **Oracle Autonomous Database 26ai**, using PHP 8.0, OCI8, and Oracle Instant Client on Oracle Linux 9.
+
+This cloud validation demonstrates substantial modern Oracle compatibility, but it does not redefine the frozen v1.0 release's original supported environment or claim exhaustive certification of every administrative workflow on 26ai.
 
 ---
 
@@ -229,15 +272,19 @@ TechZone v1.0 has been tested with Oracle Database 10g XE. Compatibility with ne
 
 **Layered application security** — authentication, authorization, CSRF protection, rate limiting, validation, database constraints, auditing, and protected logging work together rather than relying on a single control.
 
+**Environment portability** — the database installer and application configuration model support isolated deployments without embedding local credentials in the project source.
+
 ---
 
 ## Project Status
 
 ### TechZone v1.0 — Stable
 
-The v1.0 release has completed functional and security regression testing for its current supported environment. Future development can continue independently while v1.0 remains preserved as the stable release.
+The v1.0 release has completed functional and security regression testing for its original supported environment and remains preserved as the stable baseline.
 
-Potential future areas include extended reporting, invoice/export functionality, additional inventory operations, administrative user management, deployment improvements, and modern Oracle Database certification.
+A separate OCI demonstration environment now provides modern Oracle 26ai validation for the clean schema and tested core application workflows without modifying the frozen v1.0 release.
+
+Potential future areas include extended reporting, invoice/export functionality, additional inventory operations, administrative user management, deployment automation, and broader modern Oracle certification.
 
 ---
 
@@ -247,7 +294,7 @@ TechZone is being developed as a **commercial/freelance software project**.
 
 The complete production source code and deployment configuration are maintained privately. This repository serves as a technical portfolio and project showcase containing documentation, architecture information, feature descriptions, and interface demonstrations.
 
-No production credentials or private customer data are included.
+No production credentials, demo passwords, private database connection details, SSH credentials, or customer data are included.
 
 ---
 
@@ -257,7 +304,7 @@ No production credentials or private customer data are included.
 
 Cybersecurity student.
 
-`PHP` · `Oracle SQL` · `Database Design` · `OCI8` · `Web Security` · `Authentication` · `RBAC` · `Transaction Processing` · `Inventory Systems`
+`PHP` · `Oracle SQL` · `Database Design` · `OCI8` · `Web Security` · `Authentication` · `RBAC` · `Transaction Processing` · `Inventory Systems` · `Oracle Cloud Infrastructure`
 
 ---
 
